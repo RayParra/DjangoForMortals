@@ -1,0 +1,1 @@
+/home/usuario/anaconda3/lib/python3.6/bisect.py
