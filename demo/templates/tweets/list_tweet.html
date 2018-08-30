@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}ListTweet{% endblock %}
+
+{% block content %}
+	<table class="table .table-strip">
+		<thead>
+			<th>User</th>
+			<th>IdTweet</th>
+			<th>Content</th>
+			<th>TimeStamp</th>
+			<th></th>
+			<th>Actions</th>
+			<th></th>
+			{% for t in tweet %}
+				<tr>
+					<td>{{ t.user }}</td>
+					<td>{{ t.id }}</td>
+					<td>{{ t.content }}</td>
+					<td>{{ t.timestamp }}</td>
+					<td> <a href="#" class="btn btn-primary">Detail</a> </td>
+					<td> <a href="#" class="btn btn-warning">Update</a></td>
+					<td> <a href="#" class="btn btn-danger">Delete</a></td>
+				</tr>
+			{% endfor %}
+		</thead>
+	</table>
+{% endblock %}
