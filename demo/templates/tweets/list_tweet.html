@@ -18,10 +18,12 @@
 					<td>{{ t.id }}</td>
 					<td>{{ t.content }}</td>
 					<td>{{ t.timestamp }}</td>
-					<td> <a href="#" class="btn btn-primary">Detail</a> </td>
-					<td> <a href="#" class="btn btn-warning">Update</a></td>
-					<td> <a href="#" class="btn btn-danger">Delete</a></td>
+					<td> <a href="{% url 'Detail_Tweet_view' t.pk %}" class="btn btn-primary">Detail</a> </td>
+					<td> <a href="{% url 'Update_Tweet_view' t.pk %}" class="btn btn-warning">Update</a></td>
+					<td> <a href="{% url 'Delete_Tweet_view' t.pk %}" class="btn btn-danger">Delete</a></td>
 				</tr>
+			{% empty %}
+			No Tweet yet!
 			{% endfor %}
 		</thead>
 	</table>

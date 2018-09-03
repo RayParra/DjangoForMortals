@@ -7,11 +7,11 @@
   <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active">
     <div class="d-flex w-100 justify-content-between">
       <h4 class="mb-1">Detail Tweet</h4>
-      <small>{{ tweet.timestamp|timesince}} ago</small>
+      <small>{{ object.timestamp|timesince}} ago</small>
     </div>
-    <p class="mb-1"><small>User: {{ tweet.user }}</small></p>
-    <p class="mb-1">{{ tweet.content }}</p>
-    <small>{{ tweet.update|timesince}} ago</small>
+    <p class="mb-1"><small>User: {{ object.user }}</small></p>
+    <p class="mb-1">{{ object.content }}</p>
+    <small>{{ object.update|timesince}} ago</small>
   </a>
 </div>
 {% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}DeleteTweet{% endblock %}
+
+{% block content %}
+
+	<form method="post">
+		{% csrf_token %}
+
+		<h3>¿Realmente deseas borrar el contacto: {{object.content}} ?</h3>
+		<small>TimeStamp: {{object.timestamp|timesince}} ago</small> <br>
+		<small>Updated: {{object.update|timesince}} ago</small> <br>
+		<button class="btn btn-danger" type="submit">Delete</button>
+		<a class="btn btn-primary" href="{% url 'List_Tweet_view' %}">regresar</a>
+	</form>
+
+{% endblock %}
