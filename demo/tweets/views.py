@@ -1,21 +1,26 @@
 from django.shortcuts import render
 from django.views import generic
-from django.forms.utils import ErrorList
-from django import forms
+
 
 from tweets.models import Tweet
 from tweets.forms import FormTweet
+from .mixins import FormsUserNeededMixin
 # Create your views here.
 
 
 # CRUD
 
 #Create
-class Create_Tweet(generic.CreateView):
+class Create_Tweet(FormsUserNeededMixin, generic.CreateView):
 	template_name = "tweets/create_tweet.html"
 	model = Tweet
+	#form_class = FormTweet
 	fields = ["content"]
 	success_url = "/tweet/list_tweet/"
+
+
+
+
 
 
 def create_tweet(request):
