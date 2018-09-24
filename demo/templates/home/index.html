@@ -1,20 +1,25 @@
 {% extends "base.html" %}
 
-{% block title %} Index {% endblock %}
+
+{% block title %}Index|Tweet{% endblock %}
 
 {% block content %}
-	<h1>Index XD</h1>
+			{% for t in object_list %}
+				<div class="media">
+				  <img class="mr-3" src=".../64x64" alt="userImage">
+				  <div class="media-body">
+				    <h5 class="mt-0">{{ t.user }} <br></h5>
+				    {{ t.content }}| 
+				    <small>
+				    	Publicated:{{ t.timestamp|timesince }} ago| <a href="{% url 'Detail_Tweet_view' t.pk %}">View</a> <br>	
+						<br>
+						<br>
+				    </small>
+				  </div>
+				</div>	
+				<hr>
+			{% empty %}
+			No Tweet yet!
+			{% endfor %}
 
-
-	<button type="button" class="btn btn-primary">Primary</button>
-	<button type="button" class="btn btn-secondary">Secondary</button>
-	<button type="button" class="btn btn-success">Success</button>
-	<button type="button" class="btn btn-danger">Danger</button>
-	<button type="button" class="btn btn-warning">Warning</button>
-	<button type="button" class="btn btn-info">Info</button>
-	<button type="button" class="btn btn-light">Light</button>
-	<button type="button" class="btn btn-dark">Dark</button>
-
-	<button type="button" class="btn btn-link">Link</button>
-	
 {% endblock %}
