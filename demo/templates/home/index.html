@@ -4,6 +4,14 @@
 {% block title %}Index|Tweet{% endblock %}
 
 {% block content %}
+	{% if not request.GET.q %}
+		<div class="row">
+			{% include "home/content_form.html" with form=create_form action_url=create_url btn_title="tweet" %}
+		</div>
+	{% endif %}
+	<hr>
+	<br>
+	<br>
 			{% for t in object_list %}
 				<div class="media">
 				  <img class="mr-3" src=".../64x64" alt="userImage">

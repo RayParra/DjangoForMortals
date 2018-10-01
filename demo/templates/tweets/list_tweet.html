@@ -3,28 +3,39 @@
 {% block title %}ListTweet{% endblock %}
 
 {% block content %}
-	<table class="table .table-strip">
-		<thead>
-			<th>User</th>
-			<th>IdTweet</th>
-			<th>Content</th>
-			<th>TimeStamp</th>
-			<th></th>
-			<th>Actions</th>
-			<th></th>
+		<div class="row">	
+
+		<div class="col-sm-9">
+
+			{% if not request.GET.p %}
+				<div class="">
+					{% include "tweets/form_create.html" with form=create_form action_url=create_url btn_title="Tweet" %}	
+				</div>
+			{% endif %}
+		<hr>
+
+
 			{% for t in object_list %}
-				<tr>
-					<td>{{ t.user }}</td>
-					<td>{{ t.id }}</td>
-					<td>{{ t.content }}</td>
-					<td>{{ t.timestamp }}</td>
-					<td> <a href="{% url 'Detail_Tweet_view' t.pk %}" class="btn btn-primary">Detail</a> </td>
-					<td> <a href="{% url 'Update_Tweet_view' t.pk %}" class="btn btn-warning">Update</a></td>
-					<td> <a href="{% url 'Delete_Tweet_view' t.pk %}" class="btn btn-danger">Delete</a></td>
-				</tr>
+				
+			<div class="media">
+			  <img class="mr-3" src=".../64x64" alt="UserImage">
+			  <div class="media-body">
+			    <h5 class="mt-0">{{ t.user }} <br></h5>
+			    {{ t.content }}
+			    <small>
+			    	Publicated: {{ t.timestamp }} ago | <a href="{% url 'tweets:Detail_Tweet_view' t.id %}">view</a><br>
+			    </small>	
+			  </div>
+			</div>
+		<hr>
 			{% empty %}
-			No Tweet yet!
+				{% if request.GET.q %}
+					No Tweet Found
+				{% else %}
+					No Tweet yet!
+				{% endif %}
 			{% endfor %}
-		</thead>
-	</table>
+		</div>
+		</div>
 {% endblock %}
+

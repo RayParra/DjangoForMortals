@@ -12,7 +12,8 @@ class Tweet(models.Model):
 	update = models.DateTimeField(auto_now_add=True)
 	timestamp = models.DateTimeField(auto_now_add=True)
 
-
+	class Meta:
+		ordering = ["-timestamp"]
 
 	def __str__(self):
 		return str(self.content)

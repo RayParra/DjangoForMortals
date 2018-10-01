@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.views import generic
-
+from django.db.models import Q
+from django.urls import reverse_lazy
 
 from tweets.models import Tweet
 from tweets.forms import FormTweet
@@ -14,11 +15,15 @@ from .mixins import FormsUserNeededMixin
 class Create_Tweet(FormsUserNeededMixin, generic.CreateView):
 	template_name = "tweets/create_tweet.html"
 	model = Tweet
-	#form_class = FormTweet
-	fields = ["content"]
-	success_url = "/tweet/list_tweet/"
+	form_class = FormTweet
+	#fields = ["content"]
+	success_url = "/"
 
-
+	def get_context_data(self, *args, **kwargs):
+		context = super(Create_Tweet, self).get_context_data(*args, **kwargs)
+		context["create_form"] = FormTweet()
+		#context["create_url"] = reverse_lazy("List_Tweet_view")
+		return context
 
 
 
@@ -76,8 +81,18 @@ class List_Tweet(generic.ListView):
 	template_name = "tweets/list_tweet.html"
 	queryset = Tweet.objects.all()
 
+	def get_queryset(self, *args, **kwargs):
+		qs = Tweet.objects.all()
+		print(self.request.GET)
+		query = self.request.GET.get("q", None)
+		if query is not None:
+			qs = qs.filter(Q(user__username__icontains=query) | Q(content__icontains=query))
+		return qs
+		
 	def get_context_data(self, *args, **kwargs):
 		context = super(List_Tweet, self).get_context_data(*args, **kwargs)
+		context["create_form"] = FormTweet()
+		context["create_url"] = reverse_lazy("tweets:Create_Tweet_view")
 		return context
 
 #def list_tweet(request):

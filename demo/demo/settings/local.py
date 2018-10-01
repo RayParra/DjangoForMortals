@@ -40,10 +40,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third Apps
+    'crispy_forms',
+    'rest_framework',
 
     # User Apps
     'home',
     'tweets',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -133,3 +136,6 @@ STATICFILES_DIRS = [
 
 # Will be Serve
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static-serve")
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
