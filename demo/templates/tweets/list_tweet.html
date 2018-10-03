@@ -2,6 +2,26 @@
 
 {% block title %}ListTweet{% endblock %}
 
+{% block script %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			console.log("Working");
+		});
+
+		$.ajax({
+			url: "{% url 'tweet-api:TweetListAPIView_api' %}",
+			method: "GET",
+			success: function(data){
+				console.log(data)
+			},
+			error: function(data){
+				console.log("error")
+				console.log(data)
+			}
+		})
+	</script>
+{% endblock %}
+
 {% block content %}
 		<div class="row">	
 
