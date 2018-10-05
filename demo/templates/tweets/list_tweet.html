@@ -12,7 +12,22 @@
 			url: "{% url 'tweet-api:TweetListAPIView_api' %}",
 			method: "GET",
 			success: function(data){
-				console.log(data)
+				//console.log(data)
+				$.each(data, function(key, value){
+					console.log(key)
+					console.log(value.user)
+					console.log(value.content)
+					var tweetKey = key
+					var tweetUser = value.user
+					var tweetContent = value.content
+					var tweetTimestamp = value.timestamp
+
+					$("#tweet-container").append(
+			
+						"<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <h5 class=\"mt-0\">" + tweetUser.username + " <br></h5>" + tweetContent + "<small> Publicated: tweetTimestamp ago | <a href=\"#\">view</a><br></small> </div> </div> <hr>"
+
+						)
+				})
 			},
 			error: function(data){
 				console.log("error")
@@ -23,6 +38,8 @@
 {% endblock %}
 
 {% block content %}
+
+
 		<div class="row">	
 
 		<div class="col-sm-9">
@@ -34,6 +51,9 @@
 			{% endif %}
 		<hr>
 
+<div id="tweet-container">
+	
+</div>
 
 			{% for t in object_list %}
 				
