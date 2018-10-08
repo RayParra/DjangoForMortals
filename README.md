@@ -1,1 +1,3 @@
 # DjangoForMortals
+
+MacOs
