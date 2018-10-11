@@ -4,49 +4,119 @@
 
 {% block script %}
 	<script type="text/javascript">
+		function getParameterByName(name, url) {
+    		if (!url) url = window.location.href;
+    			name = name.replace(/[\[\]]/g, '\\$&');
+    		var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        	results = regex.exec(url);
+    		if (!results) return null;
+    		if (!results[2]) return '';
+    		return decodeURIComponent(results[2].replace(/\+/g, ' '));
+		}
+
+
 		$(document).ready(function(){
 			console.log("Working");
-		});
-
-		$.ajax({
-			url: "{% url 'tweet-api:TweetListAPIView_api' %}",
-			method: "GET",
-			success: function(data){
-				//console.log(data)
-				$.each(data, function(key, value){
-					console.log(key)
-					console.log(value.user)
-					console.log(value.content)
-					var tweetKey = key
-					var tweetUser = value.user
-					var tweetContent = value.content
-					var tweetTimestamp = value.timestamp
-
-					$("#tweet-container").append(
+		
+		var query = getParameterByName('q')
+			//console.log(query)
+			var tweetList = []
 			
-						"<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <h5 class=\"mt-0\">" + tweetUser.username + " <br></h5>" + tweetContent + "<small> Publicated: tweetTimestamp ago | <a href=\"#\">view</a><br></small> </div> </div> <hr>"
 
-						)
-				})
-			},
-			error: function(data){
-				console.log("error")
-				console.log(data)
+		function attachTweet(tweetValue, prepend){
+			var tweetUser = tweetValue.user
+			var tweetContent = tweetValue.content
+			var tweetDateDisplay = tweetValue.date_display
+
+			var tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <h5 class=\"mt-0\">" + tweetUser.username + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href=\"#\">view</a><br></small> </div> </div> <hr>"
+			if (prepend==true) {
+				$("#tweet-container").prepend(tweetFormatedHtml)
 			}
-		})
+			else{
+				$("#tweet-container").append(tweetFormatedHtml)	
+			}
+			
+		}
+
+
+		function parseTweets(){
+			if (tweetList == 0){
+				$("#tweet-container").text("Not Tweet Found")
+			}
+			else{
+				$.each(tweetList, function(key, value){
+					//console.log(key)
+					//console.log(value.user)
+					//console.log(value.content)
+					var tweetKey = key;
+					
+					attachTweet(value)
+					
+					})
+
+				}
+			}
+
+		function fetchTweet(){
+				$.ajax({
+					url: "/api/tweet/",
+					method: "GET",
+					data: {"q": query},
+
+				success: function(data){
+					//console.log(data)
+					tweetList = data
+					parseTweets()
+
+					},
+				
+				error: function(data){
+					console.log("error")
+					console.log(data)
+					}
+				})
+
+			}
+
+			fetchTweet()
+
+			$("#tweet-form").submit(function(event){
+				event.preventDefault()
+				var this_ = $(this)
+				//console.log(event)
+				//console.log(this_)
+				var formData = this_.serialize()
+				//fetchTweet()
+
+				$.ajax({
+				 	url: "/api/tweet/create/",
+				 	data: formData,
+				 	method: "POST",
+				 	success: function(data){
+				 		this_.find("input[type=text],textarea").val("")
+				 		//console.log(data)
+				 		//fetchTweet()
+				 		attachTweet(data,true)
+				 	},
+			 	error: function(data){
+			 		console.log("error")
+			 		console.log(data.statusText)
+					console.log(data.status)
+			 	}
+		 })
+		})	
+		
+	});
+
+		
 	</script>
 {% endblock %}
 
 {% block content %}
 
-
-		<div class="row">	
-
-		<div class="col-sm-9">
-
 			{% if not request.GET.p %}
 				<div class="">
-					{% include "tweets/form_create.html" with form=create_form action_url=create_url btn_title="Tweet" %}	
+					{% include "tweets/form_create.html" with form=create_form action_url=create_url btn_title="Tweet" form_id="tweet-form"%}	
 				</div>
 			{% endif %}
 		<hr>
@@ -55,27 +125,6 @@
 	
 </div>
 
-			{% for t in object_list %}
-				
-			<div class="media">
-			  <img class="mr-3" src=".../64x64" alt="UserImage">
-			  <div class="media-body">
-			    <h5 class="mt-0">{{ t.user }} <br></h5>
-			    {{ t.content }}
-			    <small>
-			    	Publicated: {{ t.timestamp }} ago | <a href="{% url 'tweets:Detail_Tweet_view' t.id %}">view</a><br>
-			    </small>	
-			  </div>
-			</div>
-		<hr>
-			{% empty %}
-				{% if request.GET.q %}
-					No Tweet Found
-				{% else %}
-					No Tweet yet!
-				{% endif %}
-			{% endfor %}
-		</div>
-		</div>
+			
 {% endblock %}
 
