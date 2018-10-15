@@ -16,11 +16,11 @@
 
 
 		$(document).ready(function(){
-			console.log("Working");
 		
 		var query = getParameterByName('q')
 			//console.log(query)
 			var tweetList = []
+			var nextTweetUrl;
 			
 
 		function attachTweet(tweetValue, prepend){
@@ -57,15 +57,28 @@
 				}
 			}
 
-		function fetchTweet(){
+		function fetchTweet(url){
+			var fetchUrl;
+			if(!url){
+				fetchUrl = "/api/tweet/"
+			}
+			else {
+				fetchUrl = url
+			}
 				$.ajax({
-					url: "/api/tweet/",
+					url: fetchUrl,
 					method: "GET",
 					data: {"q": query},
 
 				success: function(data){
-					//console.log(data)
-					tweetList = data
+					console.log(data)
+					tweetList = data.results
+					if(data.next){
+						nextTweetUrl = data.next	
+					}
+					else{
+						$("#load_more_tweets").css("display", "none")
+					}
 					parseTweets()
 
 					},
@@ -79,6 +92,47 @@
 			}
 
 			fetchTweet()
+
+			$("#load_more_tweets").click(function(event){
+				event.preventDefault()
+				// load more tweets
+				if(nextTweetUrl){
+					fetchTweet(nextTweetUrl)
+				}
+			})
+
+
+			var charsStar = 256
+			var charsCurrent = 0
+			$("#tweet-form").append("<span id='tweetCharsLeft'>"+ charsStar +"</span>")
+			$("#tweet-form textarea").keyup(function(event){
+				var tweetValue = $(this).val()
+				var spanClass = $("#tweetCharsLeft")
+				charsCurrent = charsStar - tweetValue.length
+
+				spanClass.text(charsCurrent)
+
+				if (charsCurrent > 0){
+					// class black
+					spanClass.removeClass("red-color")
+					spanClass.removeClass("grey-color")
+				}
+
+				if (charsCurrent == 0){
+					// class gray
+					spanClass.removeClass("red-color")
+					spanClass.addClass("grey-color")
+				}
+
+				if (charsCurrent < 0){
+					// class red
+					spanClass.removeClass("grey-color")
+					spanClass.addClass("red-color")
+				}
+
+
+			})
+
 
 			$("#tweet-form").submit(function(event){
 				event.preventDefault()
@@ -125,6 +179,7 @@
 	
 </div>
 
+<a href="#" id="load_more_tweets">LoadMoreTweets</a>
 			
 {% endblock %}
 
