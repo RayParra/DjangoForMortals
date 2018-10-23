@@ -26,9 +26,10 @@
 		function attachTweet(tweetValue, prepend){
 			var tweetUser = tweetValue.user
 			var tweetContent = tweetValue.content
+			//var tweetContentId = "/detail_tweet/" + tweetValue.id
 			var tweetDateDisplay = tweetValue.date_display
 
-			var tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <h5 class=\"mt-0\">" + tweetUser.username + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href=\"#\">view</a><br></small> </div> </div> <hr>"
+			var tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <h5 class=\"mt-0\">" + "<a href='" + tweetUser.url + "'> " + tweetUser.username + " </a> " + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href=\"\">view</a><br></small> </div> </div> <hr>"
 			if (prepend==true) {
 				$("#tweet-container").prepend(tweetFormatedHtml)
 			}

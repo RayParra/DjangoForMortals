@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}UserProfile{% endblock %}
+
+{% block content %}
+	{{ object.username }}
+	{{ object.email}}
+	<br><hr>
+	Tweets:
+	{% for tweet in object.tweet_set.all %}
+		{{ tweet.content }} <br>
+	{% endfor %}
+
+<br><hr>
+
+following: <br>
+{% for user in object.profile.following.all %}
+		{{ user.username }} <br>
+
+{% empty %}
+<h6>Not Following any Users</h6>
+{% endfor %}
+
+<hr>
+followed: <br>
+{% for profile in object.followed_by.all %}
+		{{ profile.user.username }} <br>
+
+{% empty %}
+<h6>Not Following any Users</h6>
+{% endfor %}
+
+
+{% endblock %}

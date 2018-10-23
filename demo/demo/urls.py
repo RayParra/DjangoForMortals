@@ -29,6 +29,7 @@ urlpatterns = [
     path('', views.List_Tweet.as_view(), name="home"),
     path('tweet/', include("tweets.urls", namespace="tweet")),
     path('api/tweet/', include("tweets.api.urls", namespace="tweet-api")),
+    path('accounts/', include("accounts.urls", namespace="user_profile")),
 ]
 
 
