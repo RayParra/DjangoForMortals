@@ -13,18 +13,18 @@
 
 <br><hr>
 
-following: <br>
-{% for user in object.profile.following.all %}
-		{{ user.username }} <br>
+following <small>({{object.profile.get_following.count}})</small>: <br>
+{% for user in object.profile.get_following %}
+	<a href="{% url 'user_profiles:user_profile' user.username %}">{{ user.username }}</a>	 <br>
 
 {% empty %}
 <h6>Not Following any Users</h6>
 {% endfor %}
 
 <hr>
-followed: <br>
+followed <small>({{object.followed_by.all.count}})</small>: <br>
 {% for profile in object.followed_by.all %}
-		{{ profile.user.username }} <br>
+	<a href="/accounts/user_profile/{{ profile.user.username }}/">{{ profile.user.username }}</a>	 <br>
 
 {% empty %}
 <h6>Not Following any Users</h6>
