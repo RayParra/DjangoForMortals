@@ -13,6 +13,9 @@
 
 <br><hr>
 
+<a class="btn btn-primary" href="{% url 'user_profiles:followView' username=object.username %}">Follow</a>
+
+<br> <hr>
 following <small>({{object.profile.get_following.count}})</small>: <br>
 {% for user in object.profile.get_following %}
 	<a href="{% url 'user_profiles:user_profile' user.username %}">{{ user.username }}</a>	 <br>
