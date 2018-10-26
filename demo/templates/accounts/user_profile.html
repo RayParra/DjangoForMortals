@@ -13,7 +13,7 @@
 
 <br><hr>
 
-<a class="btn btn-primary" href="{% url 'user_profiles:followView' username=object.username %}">Follow</a>
+<a class="btn btn-primary" href="{% url 'user_profiles:followView' username=object.username %}"> {% if following %}UnFollow {% else %} Follow {% endif %} </a>
 
 <br> <hr>
 following <small>({{object.profile.get_following.count}})</small>: <br>
