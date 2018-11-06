@@ -12,5 +12,5 @@ class HashTagView(View):
 		context = {
 			"obj": obj
 		}
-		return render(request, "hashtags/hashtag.html", context)
+		return render(request, "hashtags/tag_view.html", context)
 
