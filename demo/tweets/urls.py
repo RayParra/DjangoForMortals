@@ -8,6 +8,7 @@ urlpatterns = [
 	path('',RedirectView.as_view(url="/")),
 	path('search', views.List_Tweet.as_view(), name="List_Tweet_view"),
 	path('detail_tweet/<int:pk>/', views.Detail_Tweet.as_view(), name="Detail_Tweet_view"),
+	path('detail_tweet/<int:pk>/retweet', views.ReTweetView.as_view(), name="ReTweet_view"),
 	path('update_tweet/<int:pk>/', views.Update_Tweet.as_view(), name="Update_Tweet_view"),
 	path('create_tweet/', views.Create_Tweet.as_view(), name="Create_Tweet_view"),
 	path('delete_tweet/<int:pk>/', views.Delete_Tweet.as_view(), name="Delete_Tweet_view"),

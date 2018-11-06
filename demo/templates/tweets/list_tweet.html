@@ -23,13 +23,23 @@
 			var nextTweetUrl;
 			
 
+		function updateHashLinks(){
+			$(".media-body").each(function(data){
+				var hashtagRegex = /(^|\s)?#([\w\d-]+)/g
+				var newText = $(this).html().replace(hashtagRegex, "$1<a href='/tags/$2/'>#$2</a>")
+				$(this).html(newText)
+			})
+		}
+
+
 		function attachTweet(tweetValue, prepend){
 			var tweetUser = tweetValue.user
 			var tweetContent = tweetValue.content
 			//var tweetContentId = "/detail_tweet/" + tweetValue.id
 			var tweetDateDisplay = tweetValue.date_display
+			console.log(tweetValue.id)
 
-			var tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <h5 class=\"mt-0\">" + "<a href='" + tweetUser.url + "'> " + tweetUser.username + " </a> " + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href=\"\">view</a><br></small> </div> </div> <hr>"
+			var tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <h5 class=\"mt-0\">" + "<a href='" + tweetUser.url + "'> " + tweetUser.username + " </a> " + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href='/tweet/detail_tweet/" + tweetValue.id +" '>view</a><br></small> </div> </div> <hr>"
 			if (prepend==true) {
 				$("#tweet-container").prepend(tweetFormatedHtml)
 			}
@@ -81,7 +91,7 @@
 						$("#load_more_tweets").css("display", "none")
 					}
 					parseTweets()
-
+					updateHashLinks()
 					},
 				
 				error: function(data){
@@ -152,6 +162,7 @@
 				 		//console.log(data)
 				 		//fetchTweet()
 				 		attachTweet(data,true)
+				 		updateHashLinks()
 				 	},
 			 	error: function(data){
 			 		console.log("error")

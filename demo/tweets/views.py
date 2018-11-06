@@ -1,5 +1,6 @@
-from django.shortcuts import render
-from django.views import generic
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.views import generic, View
 from django.db.models import Q
 from django.urls import reverse_lazy
 
@@ -8,6 +9,14 @@ from tweets.forms import FormTweet
 from .mixins import FormsUserNeededMixin
 # Create your views here.
 
+
+class ReTweetView(View):
+	def get(self, request, pk, *args, **kwargs):
+		tweet = get_object_or_404(pk=pk)
+		if request.user.is_authenticated():
+			new_tweet = Tweet.objects.retweet(request.user, tweet)
+			return HttpResponseRedirect(new_tweet.get_absolute_url())
+		return HttpResponseRedirect(tweet.get_absolute_url())
 
 # CRUD
 

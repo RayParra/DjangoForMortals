@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}HashTag{% endblock %}
+
+{% block content %}
+	<h2>{{ obj.tag }}</h2>
+	 <br>
+	<hr>
+	{% for tweet in obj.get_tweets %}
+		{{ tweet.content }} <br>
+	{% endfor %}
+{% endblock %}

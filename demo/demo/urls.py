@@ -21,6 +21,8 @@ from django.conf.urls.static import static
 #from home import urls as home_urls
 #from tweets import urls as tweets_urls
 from tweets import views
+from hashtags.views import HashTagView
+
 
 
 urlpatterns = [
@@ -28,6 +30,7 @@ urlpatterns = [
     #path('', include(home_urls)),
     path('', views.List_Tweet.as_view(), name="home"),
     path('tweet/', include("tweets.urls", namespace="tweet")),
+    path('tags/<str:hashtag>/', HashTagView.as_view(), name="hashtag"),
     path('api/tweet/', include("tweets.api.urls", namespace="tweet-api")),
     path('accounts/', include("accounts.urls", namespace="user_profile")),
 ]
