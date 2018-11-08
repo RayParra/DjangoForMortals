@@ -12,10 +12,10 @@ from .mixins import FormsUserNeededMixin
 
 class ReTweetView(View):
 	def get(self, request, pk, *args, **kwargs):
-		tweet = get_object_or_404(pk=pk)
-		if request.user.is_authenticated():
+		tweet = get_object_or_404(Tweet, pk=pk)
+		if request.user.is_authenticated:
 			new_tweet = Tweet.objects.retweet(request.user, tweet)
-			return HttpResponseRedirect(new_tweet.get_absolute_url())
+			return HttpResponseRedirect("/")
 		return HttpResponseRedirect(tweet.get_absolute_url())
 
 # CRUD

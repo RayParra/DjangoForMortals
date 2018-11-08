@@ -32,14 +32,23 @@
 		}
 
 
-		function attachTweet(tweetValue, prepend){
+		function attachTweet(tweetValue, prepend, retweet){
 			var tweetUser = tweetValue.user
+			//var isRetweet = tweetValue.is_retweet
 			var tweetContent = tweetValue.content
-			//var tweetContentId = "/detail_tweet/" + tweetValue.id
 			var tweetDateDisplay = tweetValue.date_display
-			console.log(tweetValue.id)
+			//console.log(tweetValue.id)
+			var tweetFormatedHtml
+			console.log(tweetValue)
+			if(retweet && tweetValue.parent){
+				var mainTweet = tweetValue.parent
+				tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <span class='grey-color'>ReTweet via | " + tweetUser.username + " on" + mainTweet.date_display + "</span><br>" + " <h5 class=\"mt-0\">" + "<a href='" + mainTweet.user.url + "'> " + mainTweet.user.username + " </a> " + " <br></h5>" + mainTweet.content + "<small> Publicated: |" + mainTweet.date_display + "| ago | <a href='/tweet/detail_tweet/" + mainTweet.id +" '>view</a><br></small> </div> </div> <hr>"
+			}else{
+				tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"><h5 class=\"mt-0\">" + "<a href='" + tweetUser.url + "'> " + tweetUser.username + " </a> " + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href='/tweet/detail_tweet/" + tweetValue.id +" '>view</a><br></small> </div> </div> <hr>"
+			}
 
-			var tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <h5 class=\"mt-0\">" + "<a href='" + tweetUser.url + "'> " + tweetUser.username + " </a> " + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href='/tweet/detail_tweet/" + tweetValue.id +" '>view</a><br></small> </div> </div> <hr>"
+
+			
 			if (prepend==true) {
 				$("#tweet-container").prepend(tweetFormatedHtml)
 			}
@@ -60,8 +69,12 @@
 					//console.log(value.user)
 					//console.log(value.content)
 					var tweetKey = key;
+					if(value.parent){
+						attachTweet(value, false, true)
+					}else{
+						attachTweet(value)
+					}
 					
-					attachTweet(value)
 					
 					})
 
