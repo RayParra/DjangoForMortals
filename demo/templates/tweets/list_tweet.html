@@ -23,11 +23,44 @@
 			var nextTweetUrl;
 			
 
+
+		$(document.body).on("click", ".retweetBtn", function(e){
+			e.preventDefault()
+			console.log("Retweet XD")
+			var url = "/api" + $(this).attr("href")
+			$.ajax({
+				method: "GET",
+				url: url,
+				success: function(data) {
+					console.log(data)
+					attachTweet(data,true, true)
+				 	updateHashLinks()
+				},
+				error: function(data) {
+					console.log("error")
+					console.log(data)
+				}
+			})
+		})
+
+
+
+
+
 		function updateHashLinks(){
 			$(".media-body").each(function(data){
+				var currentHtml = $(this).html()
+				var newText
 				var hashtagRegex = /(^|\s)?#([\w\d-]+)/g
-				var newText = $(this).html().replace(hashtagRegex, "$1<a href='/tags/$2/'>#$2</a>")
+				
+				newText = currentHtml.replace(hashtagRegex, "$1<a href='/tags/$2/'>#$2</a>")
+				
+
+				var usernameRegex = /(^|\s)?@([\w\d-]+)/g
+
+				newText = newText.replace(usernameRegex, "$1<a href='/tags/$2/'>@$2</a>")
 				$(this).html(newText)
+
 			})
 		}
 
@@ -39,12 +72,16 @@
 			var tweetDateDisplay = tweetValue.date_display
 			//console.log(tweetValue.id)
 			var tweetFormatedHtml
-			console.log(tweetValue)
+			//console.log(tweetValue)
 			if(retweet && tweetValue.parent){
+				//ReTweet
+
 				var mainTweet = tweetValue.parent
-				tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <span class='grey-color'>ReTweet via | " + tweetUser.username + " on" + mainTweet.date_display + "</span><br>" + " <h5 class=\"mt-0\">" + "<a href='" + mainTweet.user.url + "'> " + mainTweet.user.username + " </a> " + " <br></h5>" + mainTweet.content + "<small> Publicated: |" + mainTweet.date_display + "| ago | <a href='/tweet/detail_tweet/" + mainTweet.id +" '>view</a><br></small> </div> </div> <hr>"
+				tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"> <span class='grey-color'>ReTweet via | " + tweetUser.username + " on" + tweetDateDisplay + "</span><br>" + " <h5 class=\"mt-0\">" + "<a href='" + mainTweet.user.url + "'> " + mainTweet.user.username + " </a> " + " <br></h5>" + mainTweet.content + "<small> Publicated: |" + mainTweet.date_display + "| ago | <a href='/tweet/detail_tweet/" + mainTweet.id +" '>view</a><br></small> " + "<a class='retweetBtn' href='/tweet/detail_tweet/" + tweetValue.id +"/retweet'>retweet</a>" + " </div> </div> <hr>"
 			}else{
-				tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"><h5 class=\"mt-0\">" + "<a href='" + tweetUser.url + "'> " + tweetUser.username + " </a> " + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href='/tweet/detail_tweet/" + tweetValue.id +" '>view</a><br></small> </div> </div> <hr>"
+				// No ReTweet
+
+				tweetFormatedHtml = "<div class=\"media\"> <img class=\"mr-3\" src=\".../64x64\" alt=\"UserImage\"><div class=\"media-body\"><h5 class=\"mt-0\">" + "<a href='" + tweetUser.url + "'> " + tweetUser.username + " </a> " + " <br></h5>" + tweetContent + "<small> Publicated: |" + tweetDateDisplay + "| ago | <a href='/tweet/detail_tweet/" + tweetValue.id +" '>view</a><br></small>" + "<a class='retweetBtn' href='/tweet/detail_tweet/" + tweetValue.id +"/retweet'>retweet</a>" + " </div> </div> <hr>"
 			}
 
 
@@ -95,7 +132,7 @@
 					data: {"q": query},
 
 				success: function(data){
-					console.log(data)
+					//console.log(data)
 					tweetList = data.results
 					if(data.next){
 						nextTweetUrl = data.next	

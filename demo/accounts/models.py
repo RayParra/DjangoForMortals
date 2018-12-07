@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.signals import post_save 
 from django.conf import settings
 # Create your models here.
 
@@ -50,3 +51,18 @@ class UserProfile(models.Model):
 	def get_following(self):
 		users = self.following.all()
 		return users.exclude(username=self.user)
+
+
+
+
+def post_save_user_receiver(sender, instance, created, *args, **kwargs):
+	print(instance)
+	if created:
+		new_profile = UserProfile.objects.get_or_create(user=instance)
+
+post_save.connect(post_save_user_receiver, sender=settings.AUTH_USER_MODEL)
+
+
+
+
+
