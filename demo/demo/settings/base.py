@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
+import django_heroku
 
 import os
 
@@ -31,13 +32,23 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third Apps
+    'crispy_forms',
+    'rest_framework',
+
+    # User Apps
     'home',
+    'tweets',
+    'accounts',
+    'hashtags',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +66,7 @@ ROOT_URLCONF = 'demo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates"],
+        'DIRS': [os.path.join(os.path.dirname(BASE_DIR), "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -119,3 +130,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+    # Don't Will be Serve
+    os.path.join(BASE_DIR, "static-storage"),
+]
+
+# Will be Serve
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static-serve")
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+django_heroku(locals())

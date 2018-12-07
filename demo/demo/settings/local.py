@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
+import django_heroku
 
 import os
 
@@ -140,3 +141,6 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static-serve")
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+django_heroku(locals())
